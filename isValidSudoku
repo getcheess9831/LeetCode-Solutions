@@ -1,0 +1,36 @@
+class Solution(object):
+    def isValidSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: bool
+        """
+        sub_boxes = [set() for _ in range(9)]
+        rows = [set() for _ in range(9)]
+        cols = [set() for _ in range(9)]
+
+        for i in range(9):
+            for j in range(9):
+                val = board[i][j]
+                if val == ".":
+                    continue
+                
+                box_index = (i // 3) * 3 + j // 3
+
+                if val in rows[i] or val in cols[j] or val in sub_boxes[box_index]:
+                    return False
+
+                rows[i].add(val)
+                cols[j].add(val)
+                sub_boxes[box_index].add(val)
+            
+        return True
+
+
+
+    
+
+    #Using three variables and sets to check for false conditions while looping through the whole board.
+    #The main problem here is how to determine which sub box we are at. since there is 3 sub boxes in each row and col, we can divide the row number by 3 to get the number of sub box we at for the row using //(whole number result). Multiply by 3 since there is 3 sub boxes in a row. Same for col, and by adding the result we get the box number.
+    #and since the sudoku is in a fixed 9x9 grid, the loop is always 9 rounds.
+    #Therefore the time complexity is O(1)
+    #space complexity is also O(1), always fixed.

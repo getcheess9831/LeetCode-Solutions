@@ -1,0 +1,27 @@
+class Solution(object):
+    def combinationSum2(self, candidates, target):
+        res = []
+        candidates.sort()
+
+        def backtrack(start, current):
+            if sum(current) == target:
+                res.append(current[:])
+                return
+            elif sum(current) > target:
+                return
+            else:
+                for i in range(start, len(candidates)):
+                    if i > start and candidates[i] == candidates[i-1]:
+                        continue
+                    current.append(candidates[i])
+                    backtrack(i+1, current)
+                    current.pop()
+        
+        backtrack(0, [])
+            
+        return res
+        
+
+        #The problem can be solved through backtracking, as the end condition being the combination == target or combination > target, else we will keep looping. But first of all we want to sort the array to make it easier to skip same combinations and skip a loop that leads to no answer.
+        #Time complexity will be O(2^n) as the worst case we go through all the possible combinations.
+        #Space complexity will be O(n), length of current can be as long as the length of n, call stack can be n times deep.

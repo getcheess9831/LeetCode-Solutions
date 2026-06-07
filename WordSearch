@@ -1,0 +1,47 @@
+class Solution(object):
+    def exist(self, board, word):
+
+        visited = set()
+
+        def findword(r, c, index):
+            if(index >= len(word)):
+                return True
+            if(r < 0 or r >= len(board)):
+                return False
+            if(c < 0 or c >= len(board[r])):
+                return False
+            if((r, c) in visited):
+                return False
+            if(board[r][c] != word[index]):
+                return False
+
+            adjacent_cells = [(r-1, c), (r+1, c), (r, c-1), (r, c+1)]
+            visited.add((r, c))
+            for n in adjacent_cells:
+                row, col = n
+                if findword(row, col, index+1):
+                    return True
+            
+            visited.remove((r, c))
+            return False
+            
+        
+        for i in range(len(board)):
+            for j in range(len(board[i])):
+                if board[i][j] == word[0]:
+                    if findword(i, j, 0):
+                        return True
+
+
+        
+        return False
+
+
+            
+
+        
+
+
+        #using recursion, search the list for the first letter of the word, and then start searching for next corresponding letter. return true if we reached the end of the word, return false if any of the follow conditions are met, 1. the corresponding row/col doesn't exist in board  2. if the cell has been visited 3. if the corresponding letter doesn't match.
+        #Time complexity would be O((m*n) * (4^L)) where L is the length of the word. As the worst case the whole board combines to make the word, so we will have to go in to the recursion for every letter. and each letter searches for 4 directions.
+        #Space complexity will be O(m*n) where stack depth is m*n, and the set visited can be as large as the size of the board, which is also m*n.

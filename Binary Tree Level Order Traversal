@@ -1,0 +1,29 @@
+class Solution(object):
+    def levelOrder(self, root):
+        if not root:
+            return []
+        q = deque()
+        q.append(root)
+        result = []
+
+        while q:
+            temp = []
+            current_level = len(q)
+            while current_level:
+                node = q.popleft()
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+                temp.append(node.val)
+                current_level -= 1
+            
+            result.append(temp)
+        
+
+        return result
+
+
+#Using bfs searching through the Tree from top to the bottom, one problem we will have is how to differentiate each level of the tree, we do that by recording the len of queue at the beginning of each loop, where the previous nodes has been poped out of the queue and the leafnodes were added, so the length of the queue at this point can represent the level. 
+#The time complexity is O(n) as we are only going to loop for n times, which is the number of nodes.
+#The space complexity is O(n) as well, the queue will at max store half of the node number which is at the bottom level, so n/2.

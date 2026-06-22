@@ -1,0 +1,24 @@
+class Solution(object):
+    def uniquePathsWithObstacles(self, obstacleGrid):
+        """
+        :type obstacleGrid: List[List[int]]
+        :rtype: int
+        """
+        repeated_grid = {}
+        def findPossiblePaths(m, n, memo):
+            if (m, n) in memo:
+                return memo[(m, n)]
+            if m >= len(obstacleGrid) or n >= len(obstacleGrid[m]) or obstacleGrid[m][n] == 1: 
+                ## if the grid has a obstacle terminate the branch, or if we have reached the right most or bottom most grid, return 0, 0 possible paths. 
+                return 0
+            if m == len(obstacleGrid) - 1 and n == len(obstacleGrid[m]) - 1: 
+                ## if we have moved to the bottom right corner, it's a possible path so return 1.
+                return 1
+            result = findPossiblePaths(m+1, n, memo) + findPossiblePaths(m, n+1, memo)
+            memo[(m, n)] = result
+            return result
+        return findPossiblePaths(0, 0, repeated_grid)
+
+        ##The question asks to find possible paths for the robot to reach the bottom right corner, paths cannot include the obstacle, we can solve the problem using recursion. terminate conditions are if we have calculated the grid's possible paths in the past, or if the grid we currently checking is not a valid grid in the obstacleGrid, meaning if it went over the length of the grid, or if the grid is the bottom right corner. Else we can keep going to the right +1 grid and bottom +1 grid.
+        ##The time complexity is at max O(m x n) as the worst case you check all the grid.
+        ##The space complexity is also O(m x n) as the worst case the dictionary can be as big as the grid, containing all the grids. the recursion stack depth O(m + n). So a conclusion or O(m x n)

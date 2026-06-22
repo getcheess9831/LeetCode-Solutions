@@ -1,0 +1,31 @@
+class Solution(object):
+    def partition(self, head, x):
+        """
+        :type head: Optional[ListNode]
+        :type x: int
+        :rtype: Optional[ListNode]
+        """
+        dummy_one = ListNode(1)
+        dummy_two = ListNode(2)
+        result = dummy_one
+        temp = dummy_two
+        node = head
+        while node: ##loop through the linked list
+            if node.val < x:
+                result.next = node
+                result = result.next
+            else:
+                temp.next = node
+                temp = temp.next
+            node = node.next
+        temp.next = None
+        result.next = dummy_two.next
+        result_head = dummy_one.next
+
+        return result_head
+
+    
+
+    ##The question asks to partition a linked list with a given value x, any number that's less than x should be in front of the numbers that are greater than or equal to x. In that case, we want to check through the linked list and relink the nodes accordingly. One thing to keep in mind, we need to relocate the next of the last >=x node, in case there is nodes that are < x after the node, otherwise it would link to the nodes that could be < x after it.
+    ##time complexity would be O(n), that we have to go through the whole linked list every time.
+    ##space complexity would be O(1), no extra space used in the loop.

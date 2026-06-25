@@ -1,0 +1,49 @@
+class Solution(object):
+    def setZeroes(self, matrix):
+        firstRow = any(matrix[0][j] == 0 for j in range(len(matrix[0])))
+        firstCol = any(matrix[i][0] == 0 for i in range(len(matrix)))
+
+        for i in range(len(matrix)):
+            for j in range(len(matrix[i])):
+                if matrix[i][j] == 0:
+                    matrix[0][j] = 0
+                    matrix[i][0] = 0
+        
+        for i in range(1, len(matrix)):
+            for j in range(1, len(matrix[i])):
+                if matrix[0][j] == 0 or matrix[i][0] == 0:
+                    matrix[i][j] = 0
+        
+
+        if firstRow:
+            for j in range(len(matrix[0])):
+                matrix[0][j] = 0
+        
+        if firstCol:
+            for i in range(len(matrix)):
+                matrix[i][0] = 0
+
+    
+    #The question asks to set the entire row that contains 0 to 0's, set the entire column that contains 0 to 0's. And we have to do it in place, which means that we cannot create another list of list to store the answer, we have to update the given matrix.
+    #We can do it in two ways, first way to store the rows and columns that contains 0's to two sets(using sets to avoid duplicate rows/columns). Then loop through the set to update the matrix. Below is the code for this method.
+        #zerorows = set()
+        #zerocols = set()
+        #for i in range(len(matrix)):
+        #   for j in range(len(matrix[i])):
+        #        if matrix[i][j] == 0:
+        #            zerorows.add(i)
+        #            zerocols.add(j)
+        
+        #for row in zerorows:
+        #    for n in range(len(matrix[row])):
+        #        matrix[row][n] = 0
+
+        #for col in zerocols:
+        #    for m in range(len(matrix)):
+        #        matrix[m][col] = 0
+        #This method gives us a time complexity of O(mn) because we have to loop through the whole matrix to find the rows and columns that cotains 0's. that's m*n, and two loops with O(m) and O(n), so technically O(mn+m+n), simplify O(mn)
+        #And a time complexity of O(m+n) for two sets, The sets can contain at max the length of row/column.
+        
+        #The submission used a different method, that we store the rows/columns using the 0th row and 0th column. With this method we have to start from the 1st row/column so we don't mess up the 0th row/column and mess up the entire matrix, we will leave that at the end. 
+        #This method gives us a time complexity of O(mn) as well, as we have 2 O(mn) loops and 2 loops with O(m) and O(n), technically O(2mn+m+n), simplify O(mn).
+        #The space complexity is O(1) because we do not need any extra space.

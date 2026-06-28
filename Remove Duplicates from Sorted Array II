@@ -1,0 +1,22 @@
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        k = 2 ##Slow indicator
+
+        for i in range(2, len(nums)):
+            if nums[i] != nums[k-2]:
+                nums[k] = nums[i]
+                k += 1
+
+        
+
+        return k
+
+
+#The question asks to remove duplicates from a sorted array , we must do it in-place, which means we're not creating another list, all the operations have to be done in the array itsself. To solve this problem we can use double indicator method, we will have a slow indicator pointing at the spot where all the indexes before that has been corrected, and a fast indicator going through the array to find the non-duplicate number.
+#We will set the slow indicator k = 2, because no matter what we will be keeping the first two, and to find the next element to update the array we can just compare the fast indicator i with k-2, if nums[i] == nums[k-2] that means it's a dup.
+#This method has a time complexity of O(n), we will be going through the array for once no matter what. I was thinking to add lines of code to detect if the rest of the array will all be the same, which we can just break the loop and return result. But it doesn't make the code more efficient, since we will have another if statement, and that we're not really doing anything if the condition nums[i] != nums[k-2] is not met. 
+#Space complexity will be O(1), no extra space required for this method.            

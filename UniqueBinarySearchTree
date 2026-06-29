@@ -1,0 +1,24 @@
+class Solution(object):
+    def numTrees(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        dp = [0] * (n+1)
+        dp[0] = 1
+        dp[1] = 1
+
+        for i in range(2, n+1):
+            for k in range(1, i+1):
+                dp[i] += dp[k-1] * dp[i-k]
+        
+
+
+        return dp[n]
+
+    
+    #The question asks to find all structurally unique BST's which has exactly n nodes of unique value from 1 to n, with a given integer n.
+    #To solve this problem, we gotta know that chosen k as Treenode, the number of structurally unique BST's will be the number of unique BST's on the left multiply by number of unique BST's on the right. Given this information, we can then just use dp to solve this problem. dp[0] and dp[1] will be set to 1. dp[i] = the total of all dp[k-1] * dp[i-k] where k is in range of 1 to i.
+    #dp[i] represents the number of BST's for i nodes.
+    #The time complexity for this problem is O(n^2) with two loops one inside of the other.
+    #THe space complexity for this problem is O(n) where the size of dp will be n+1.

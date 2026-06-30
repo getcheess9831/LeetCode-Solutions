@@ -1,0 +1,20 @@
+class Solution(object):
+    def maxProfit(self, prices):
+        """
+        :type prices: List[int]
+        :rtype: int
+        """
+        result = 0
+
+        for i in range(0, len(prices)-1):
+            if prices[i+1] - prices[i] > 0:
+                result += prices[i+1] - prices[i]
+            
+
+        
+        return result
+
+#The question asks to find the max profit you can achieve given an integer array prices, which represents the price of a stock on each day. 
+#The key to this problem is "you can sell and buy the stock multiple times on the same day", with this information this problem can be very simple, using GREEDY, we find out if two consecutive days have a positive difference, prices[i+1] - prices[i], if so then we can make profit buying on day i and selling on day i+1. With the condition to operate multiple times on the same day, we don't have to find the max profit day to buy and sell, just catch every single profit we can get.
+#The time complexity for this problem is O(n) where n is the length of prices. Only iterating the array for once.
+#The space complexity is O(1), the only variable we use is result, a integer variable.

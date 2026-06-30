@@ -1,0 +1,55 @@
+class Solution(object):
+    def isInterleave(self, s1, s2, s3):
+        """
+        :type s1: str
+        :type s2: str
+        :type s3: str
+        :rtype: bool
+        """
+        if len(s1) + len(s2) != len(s3):
+            return False
+        
+        dp = [False] * (len(s2) + 1)
+        dp[0] = True
+
+        for j in range(1, len(s2) + 1):
+            dp[j] = dp[j-1] and s2[j-1] == s3[j-1]
+
+        for i in range(1, len(s1) + 1):
+            dp[0] = dp[0] and s1[i-1] == s3[i-1]
+            for j in range(1, len(s2) + 1):
+                dp[j] = (dp[j] and s1[i-1] == s3[i+j-1]) or (dp[j-1] and s2[j-1] == s3[i+j-1])
+        
+        return dp[len(s2)]
+
+        #-----------------------------------Two different method-------------------------------------------------
+
+
+        dp = [[False] * (len(s2) + 1) for _ in range(len(s1) + 1)]
+
+        dp[0][0] = True
+
+        for i in range(1, len(s1) + 1):
+            if dp[i-1][0] == True and s1[i-1] == s3[i-1]:
+                dp[i][0] = True
+        
+        for j in range(1, len(s2) + 1):
+            if dp[0][j-1] == True and s2[j-1] == s3[j-1]:
+                dp[0][j] = True
+ 
+        for i in range(1, len(s1) + 1):
+            for j in range(1, len(s2) + 1):
+                if dp[i-1][j] == True and s1[i-1] == s3[i+j-1]:
+                    dp[i][j] = True
+                if dp[i][j-1] == True and s2[j-1] == s3[i+j-1]:
+                    dp[i][j] = True
+
+        
+        return dp[len(s1)][len(s2)]
+
+    
+#The question asks to find whether the given string s3 can be formed by an interleaving of given string s1 and s2. 
+#The code is separated into two parts, the first part using an extra memory space of O(s2.length), which is the follow up questions. The second part is the first version that used O(m*n+1) extra space.
+#The idea is similar. dp[i][j] simply means if i letters of s1 and j letters of s2 can form the first i+j letters in s3. That is decided by the previous column or row. dp[i][j] can be decided if dp[i-1][j] is True and s1[i-1] == s3[i+j-1], which is saying that the previous letters form correctly and the current letter also match. Same for dp[i][j-1]. The difference between the second method and the first method is that we use only the length of s2 extra space, we use dp[0] to represent dp[i][0] for the current row i, and the rest of dp we store dp[i][j] where i stays the same. We update dp every inner loop because we are really only updating j^th element. A problem that I came through while programming is that dp[j] sometimes stays unchanged due to both conditions failing, so we changed up a little bit using dp[j] = (dp[j] and s1[i-1] == s3[i+j-1]) or (dp[j-1] and s2[j-1] == s3[i+j-1]) to force the update. 
+#The time complexity for the first method is O(m*n+n) which is O(m*n), where we ran 3 loops, a loop with length of n, a loop with length of m, and an inner loop with the length of n. The second method is similar but an additional loop with length of m, which is O(m*n+m+n), still O(m*n).
+#The space complexity for the first method is O(n), the size of dp is the length of s2. The second method is O((m+1)*(n+1)), which simplifies to O(mn).

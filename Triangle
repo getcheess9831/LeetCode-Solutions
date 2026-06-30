@@ -1,0 +1,27 @@
+class Solution(object):
+    def minimumTotal(self, triangle):
+        """
+        :type triangle: List[List[int]]
+        :rtype: int
+        """
+        if len(triangle) == 1:
+            return triangle[0][0]
+        dp = [triangle[0][0]]
+        for i in range(1, len(triangle)):
+            new_dp = [float("inf")] * len(triangle[i])
+            for j in range(0, len(triangle[i])):
+                if j == 0:
+                    new_dp[j] = triangle[i][j] + dp[j]
+                elif j == len(triangle[i]) - 1:
+                    new_dp[j] = triangle[i][j] + dp[j-1]
+                else:
+                    new_dp[j] = triangle[i][j] + min(dp[j], dp[j-1])
+            
+            dp = new_dp
+
+        return min(dp)
+
+#The question asks to find the minimum path sum from top to bottom in a triangle array. 
+#We can solve this problem using DP, where dp[j] means the minimum sum to get to the j^th element in i^th row. Base case if the triangle is the length of 1, return the only value in the array. Else dp is set to the first value, the top of the triangle. One thing to mention, the dp is a list that changes length as we go deep in the array, because each row of the triangle contains +1 element. What I did to solve this is creating a new list called new_dp to store the value, and set dp = new_dp at the end of each loop. At the end, as we got the result of the last row, we can simply return the min of the dp. Which means the minimun path sum to get to the bottom.
+#The time complexity for this problem is O(n(n+1)/2), which is O(n^2).
+#The space complexity is O(n + n) where n is the size of the triangle array given. Which is O(n), the size of dp and new_dp can be as big as the row number. Because in a triangle setup, the number of elements in a row is equal to the row number. 

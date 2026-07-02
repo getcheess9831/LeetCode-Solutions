@@ -1,0 +1,37 @@
+class Solution(object):
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        prev2 = 0 #same as dp[0]
+        prev = nums[0] # same as dp[1]
+
+        for i in range(2, len(nums)+1):
+            prev, prev2 = max(prev, prev2 + nums[i-1]), prev
+
+
+        return prev
+
+#The question asks to find the max amount of money you can rob tonight without alerting the police, in other words, under the condition of not robbing adjacent houses.
+#The question can be solved with DP, however, instead of creating a whole list to store dp values, we only need two values from the i-1 and i-2, so we will only need 2 variables prev and prev2 to store the previous two values.
+#The time complexity for this mehod is O(n), iterating from 2 to len(nums)+1.
+#The space complexity for his method is O(1), only 2 intclass Solution(object):
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        prev2 = 0 #same as dp[0]
+        prev = nums[0] # same as dp[1]
+
+        for i in range(2, len(nums)+1):
+            prev, prev2 = max(prev, prev2 + nums[i-1]), prev
+
+
+        return prev
+
+#The question asks to find the max amount of money you can rob tonight without alerting the police, in other words, under the condition of not robbing adjacent houses.
+#The question can be solved with DP, however, instead of creating a whole list to store dp values, we only need two values from the i-1 and i-2, so we will only need 2 variables prev and prev2 to store the previous two values.
+#The time complexity for this mehod is O(n), iterating from 2 to len(nums)+1.
+#The space complexity for his method is O(1), only 2 int variables are used.

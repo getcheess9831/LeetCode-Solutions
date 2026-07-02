@@ -1,0 +1,29 @@
+class Solution(object):
+    def rob(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        def robI(nums, start, end):
+            prev2 = 0 #same as dp[0]
+            prev = nums[start] # same as dp[1]
+
+            for i in range(start+2, end+1):
+                prev, prev2 = max(prev, prev2 + nums[i-1]), prev
+
+
+            return prev
+        
+        if len(nums) == 1:
+            return nums[0]
+        
+        reswithZero = robI(nums, 0, len(nums)-1)
+        resnoZero = robI(nums, 1, len(nums))
+
+        return max(reswithZero, resnoZero)
+
+
+#The question asks to find the max amount of money you can rob tonight, with the conditions:1.adjacent houses cannot be robbed together. 2. The houses are arranged in a circle, which means the first house and the last house is considered adjacent.
+#This question is the same as House Robber I, the only difference is that the first house is considered adjacent to the last house. So to solve this question, we can literally use the code from House Robber I, but adding a bit of conditions. We can split the houses into two piles, first pile including the first house excluding the last house, the second pile including the last house excluding the first house. We can do that by adding 2 variables start and end to the def robI, which is the code from HR I. However, since we are doing two calls to robI, with different ranges, if the size of nums is 1, both calls will end up not working. So we will need an if statement to solve when n = 1.
+#The time complexity for this problem is O(n), each time we call robI, it's one time of iteration length of n, we're doing that twice so it's 2n, simplified as O(n). 
+#The space complexity for this problem is O(1), same as HR I, we only using fixed size variables.

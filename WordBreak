@@ -1,0 +1,46 @@
+class Solution(object):
+    def wordBreak(self, s, wordDict):
+        """
+        :type s: str
+        :type wordDict: List[str]
+        :rtype: bool
+        """
+        dp = {0} #Using a set reduces the time it needs to find a specific element significantly, compared to a list.
+        minLen = float('inf') #Using min/max length to sort out the strings in s that is never going to be possible. 
+        maxLen = 0
+        for word in wordDict:
+            if len(word) > maxLen:
+                maxLen = len(word)
+            if len(word) < minLen:
+                minLen = len(word)
+        for i in range(1, len(s)+1):
+            for j in range(i-maxLen, i-minLen+1):
+                if j in dp and s[j:i] in wordDict:
+                    dp.add(i)
+                    break
+            
+        return len(s) in dp
+        #--------------------------Different methods------------------------------------
+
+        dp = []
+        dp[0] = True
+
+        for i in range(1, len(s)+1):
+            temp = False
+            for j in range(i):
+                if dp[j] and s[j:i] in wordDict:
+                    temp = True
+                    break
+            dp.append(temp)
+        
+        return dp[-1]
+            
+
+        
+    
+    #The problem Word Break asks to see if string s can be segmented into a space-separated sequence of one or more dictionary words.
+    #To solve this problem we can use dynamic programming. I Tried two methods to solve the problem, the main idea to solve this problem is the same, that we store all the index value of s, that we can reach with words in wordDict. The differences: 
+    #First method we initialized dp as a set, just so when we try to find if an element is in dp, it's O(1), instead of O(n) if it was a list. And a min/max length to sort out the segments of string s that is never going to be possible because we have min/max length, any segments longer/shorter than that is an impossible segment. However, in exchange of the benefits min/max length brought to the code, we also sacrificed run time because we need O(m) time to initialize them, where m is the length of wordDict, but it's still overall a better method considering time complexity.
+    #Second method is just a simpler method that we store every index of s with a boolean value, meaning if it is possible to segement string s from 0 to i into a space-separated sequence of one or more words in wordDict.
+    #Time complexity for two methods: First method has a O(n*k^2) where n is the length of string s, and k is the length of min to max. The inner loop runs k times and since checking membership requires hashing the substring, which itself takes O(k) time, so it's k^2, but k itself is an integer from maxlength-minlength, which according to the problem, wordDict[i].length is between 1 to 20, so we can some what ignore the k and it would just be simplified to O(n). The second method has a O(n^3 * m) time complexity, where the inner loop j can be as bad as n times， the slicing s[j:i] can also be as bad as n times, and m stands for the length of wordDict, because every time we do in wordDict we are running comparison with all the elements in wordDict. So the time complexity can be very bad.
+    #Space complexity wise they are both O(n), the first method can be as bad as O(n), the second method will always be O(n). However, the load factor of hash tables can make the first method sometimes worse in space usage.

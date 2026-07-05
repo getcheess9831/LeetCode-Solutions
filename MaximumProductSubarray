@@ -19,7 +19,17 @@ class Solution(object):
 
 
 # Problem: Maximum Product Subarray - find a subarray that has the largest product and return the product.
-# Approach: Using dp to track the max product and min product that ends at index i, and use the information to further  calculate the next dp. And an variable maxProduct to track the max product along the way.
-# Initialize maxDP, minDP, maxProduct to nums[0], when there is only one integer, the max product is itself. Additionally we use a temp to store the value of maxDP so it won't affect the value of minDP after update. We can also do maxDP, minDP = max(...), min(...) but it wouldn't be as clear and readable as using temp. At the end of the loop we check if maxProduct needs an update or not.
+
+# Approach: Using dp to track the max product and min product that ends at index i, since multiplying two 
+#   negative numbers can turn the min product into the new max product, and use the information to further 
+#   calculate the next dp. And an variable maxProduct to track the max product along the way.
+
+# Initialize maxDP, minDP, maxProduct to nums[0], when there is only one integer, the max product is itself.
+#   Additionally we use a temp to store the value of maxDP so it won't affect the value of minDP after 
+#   update. We can also do maxDP, minDP = max(...), min(...) but it wouldn't be as clear and readable as 
+#   using temp. At each iteration we check if maxProduct needs an update.
+
+
 # Time complexity O(n), iterates from 1 to n for once, where n is the length of nums.
+
 # Space complexity O(1), 3 fix sized variables are used.

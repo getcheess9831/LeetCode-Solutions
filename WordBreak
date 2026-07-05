@@ -38,9 +38,38 @@ class Solution(object):
 
         
     
-    #The problem Word Break asks to see if string s can be segmented into a space-separated sequence of one or more dictionary words.
-    #To solve this problem we can use dynamic programming. I Tried two methods to solve the problem, the main idea to solve this problem is the same, that we store all the index value of s, that we can reach with words in wordDict. The differences: 
-    #First method we initialized dp as a set, just so when we try to find if an element is in dp, it's O(1), instead of O(n) if it was a list. And a min/max length to sort out the segments of string s that is never going to be possible because we have min/max length, any segments longer/shorter than that is an impossible segment. However, in exchange of the benefits min/max length brought to the code, we also sacrificed run time because we need O(m) time to initialize them, where m is the length of wordDict, but it's still overall a better method considering time complexity.
-    #Second method is just a simpler method that we store every index of s with a boolean value, meaning if it is possible to segement string s from 0 to i into a space-separated sequence of one or more words in wordDict.
-    #Time complexity for two methods: First method has a O(n*k^2) where n is the length of string s, and k is the length of min to max. The inner loop runs k times and since checking membership requires hashing the substring, which itself takes O(k) time, so it's k^2, but k itself is an integer from maxlength-minlength, which according to the problem, wordDict[i].length is between 1 to 20, so we can some what ignore the k and it would just be simplified to O(n). The second method has a O(n^3 * m) time complexity, where the inner loop j can be as bad as n times， the slicing s[j:i] can also be as bad as n times, and m stands for the length of wordDict, because every time we do in wordDict we are running comparison with all the elements in wordDict. So the time complexity can be very bad.
-    #Space complexity wise they are both O(n), the first method can be as bad as O(n), the second method will always be O(n). However, the load factor of hash tables can make the first method sometimes worse in space usage.
+# Problem: Word Break - determine if string s can be segmented into
+# a space-separated sequence of one or more dictionary words.
+#
+# Core idea (both methods): use DP to track which indices of s are
+# "reachable" - i.e., s[0:i] can be fully segmented into dictionary words.
+#
+# Method 1 (optimized): set + min/max word length pruning
+#   - dp is a set instead of a list/array, so checking "is index j reachable"
+#     is O(1) instead of O(n).
+#   - We precompute minLen/maxLen (shortest/longest word in wordDict) to
+#     prune the inner loop: any substring s[j:i] whose length falls outside
+#     [minLen, maxLen] can never match a dictionary word, so we skip it.
+#   - Trade-off: computing minLen/maxLen costs O(m) upfront (m = number of
+#     words in wordDict), and wordDict itself is converted to a set for O(1)
+#     membership checks. This adds some fixed overhead, but pays off overall.
+#   - Time: O(n * k^2), where n = len(s), k = maxLen - minLen (bounded by
+#     the range of word lengths). The inner loop runs k times, and each
+#     substring check (slicing + hashing) also costs O(k). Since wordDict[i]
+#     length is constrained to 1-20 per problem constraints, k is small and
+#     effectively a constant, so this simplifies to roughly O(n).
+#   - Space: O(n) in the worst case (dp can hold up to n reachable indices),
+#     but the load factor / underlying properties of a hash table can make
+#     actual memory usage somewhat worse than an equivalent array-based
+#     structure of the same logical size.
+#
+# Method 2 (naive): boolean DP array
+#   - dp[i] is a boolean indicating whether s[0:i] can be segmented.
+#   - For each i, we check all j < i: if dp[j] is True and s[j:i] is in
+#     wordDict, then dp[i] = True.
+#   - Time: O(n^3 * m). The outer loop runs n times, the inner loop j can
+#     run up to n times, and for each (i, j) pair, slicing s[j:i] costs up
+#     to O(n) and checking membership against a list-based wordDict costs
+#     O(n * m) (comparing against each of the m words, each comparison up
+#     to O(n)). These costs multiply together, giving O(n^3 * m) overall.
+#   - Space: O(n), since dp is always exactly n+1 boolean values.

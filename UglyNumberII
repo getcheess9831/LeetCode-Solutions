@@ -1,0 +1,34 @@
+class Solution(object):
+    def nthUglyNumber(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        dp = [1]
+        if n == 1:
+            return 1
+        twoTimes = 0
+        threeTimes = 0
+        fiveTimes = 0
+
+        while len(dp) < n:
+            comp = [(dp[twoTimes] * 2), (dp[threeTimes] * 3), (dp[fiveTimes] * 5)]
+            nextUgly = min(comp)
+            if comp[0] == nextUgly:
+                twoTimes += 1
+            if comp[1] == nextUgly:
+                threeTimes += 1
+            if comp[2] == nextUgly:
+                fiveTimes += 1
+            dp.append(nextUgly)
+        
+
+        return dp[-1]
+
+# Problem: Ugly Number II, given an integer n, return the n^th ugly number. An ugly number is a positive integer whose prime factors are limited to 2, 3, and 5.
+
+# Core idea: If we knew a number x is an ugly number, then we know 2x, 3x, 5x will also be an ugly number, using this key idea we can have 3 indicators, 2x, 3x, 5x moving on their on pace, to find the next lowest ugly number.
+
+# dp is initialized to a list with only 1 element, which is the first ugly number 1. And three variables 2x, 3x, and 5x pointing to the indices in dp. At each loop, we compare the 3 numbers, and take the minimum of them, append it in dp, move the pointer forward for 1. Sometimes the product can be the same ugly number, such as 2*6 and 3*4, to avoid latency in moving pointer, we compare all 3 pointers each loop.
+
+# Time complexity for this problem is O(n), simply iterating for n-1 times.

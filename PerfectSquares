@@ -1,0 +1,52 @@
+class Solution(object):
+    def numSquares(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+
+        temp = n ** 0.5
+        if int(temp) == temp: #if it's a perfect square itself
+            return 1
+        
+        i = 1
+        while i * i <= n: # if it's the sum of 2 perfect squares
+            temp = (n - i*i) ** 0.5
+            if int(temp) == temp:
+                return 2
+            i += 1
+        
+        i = n
+        while i % 4 == 0: # if it's the sum of 4 perfect squares
+           i = i // 4
+
+        if i % 8 == 7:
+            return 4
+
+        
+
+        return 3 # according to legendre's three square theorem, if n doesn't match n = 4^a × (8b + 7), then it has to be the sum of 3 or less perfect squares.
+        
+        #---------------different method--------------
+         
+        dp = [0]
+
+        for i in range(1, n+1):
+            leastNum = float('inf')
+            j = 1
+            while j * j <= i:
+                leastNum = min(leastNum, dp[i-j*j] + 1)
+                j += 1
+            
+            dp.append(leastNum)
+        
+
+
+        return dp[-1]
+
+# Problem: Perfect Squares, given an integer n, return the least number of perfect square numbers that sum to n.
+
+# Core ideas/approach: The problem was solved in two different methods, I did the problem with the second method myself, which is using dp to store the number of perfect squares needed to sum to n, in other words, dp[i] represents the number of perfect squares needed to sum to the number i. We do this by running a loop from 1 to n, find its dp, using an inner loop to loop through all the perfect square numbers that is less than or equal to the number i, each inner loop round represents a perfect square number, j*j. Using dp[i-j*j] to find the least number of perfect squares needed for the number i - j*j, and then add one to it, which represents the least number of perfect squares needed plus 1, which is j*j itself. Using a variable leastNum to store the minimum number of perfect squares needed. The first method was created while researching for a better way to solve the problem using claude, I was told the legendre's three square theorem, which is if a postive integer number is not in the form of n = 4^a × (8b + 7), it has to be the sum of 3 or less perfect squares. Using this theorem, we can first sort out if the number is a perfect square itself, using i ** 0.5, which is basically the same as square root, and check if it's a whole number, secondly we check if it's the sum of two perfect squares, where we iterate through all perfect squares that is less than or equal to the number n, and using n-i*i and check if the result is a perfect square or not. Lastly we check if it fits the equation n = 4^a × (8b + 7), if it doesn't, it has to be the sum of 3 perfect squares.
+
+# Time complexity for the legendre's three square theorem method is O(1) + O(sqrt(n)) + O(log(n)) + O(1), which is O(sqrt(n)). For the second method using dynamic programming it's O(n*sqrt(n)).
+# Space complexity for the legendre's three square theorem method is O(1), only using fix sized variables. For the dp method, it's O(n), dp will eventually be size n.

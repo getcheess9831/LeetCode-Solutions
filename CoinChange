@@ -1,0 +1,31 @@
+class Solution(object):
+    def coinChange(self, coins, amount):
+        """
+        :type coins: List[int]
+        :type amount: int
+        :rtype: int
+        """
+
+        dp = [0]
+
+        for i in range(1, amount+1):
+            temp = float('inf')
+            for j in range(0, len(coins)):
+                if i - coins[j] >= 0 and dp[i-coins[j]] != -1:
+                    temp = min(dp[i-coins[j]] + 1, temp)
+            if temp == float('inf'):
+                dp.append(-1)
+            else:
+                dp.append(temp)
+                
+
+        return dp[-1]
+
+# Problem: Coin Change, given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money, return the fewest number of coins that you need to make up the amount. If no combinations can be made, return -1.
+
+# Core Idea: use dp to store the fewest number of coins needed for amount i, in other words dp[i] represents the fewest number of coins needed to make up the amount i.
+
+# With the value of each coins, we can simply use amount - coinAmount to find how much more do we need without the coin itself, using dp, we already have the fewest number of coins needed for the amount i - coinAmount, so dp[i] will simply be dp[i-coinamount] + 1 (1 represents the coin itself). Iterating from 1 to the amount, and return the dp[amount], which is the last element in dp. Two conditions we check to see if the amount i can be combined using the coin amount is if i - coinAmount is >= 0, and if dp[i-coinAmount] is not -1, if it's -1 it means that dp[i-coinAmount] cannot be combined which also means dp[i] cannot be combined using the current coin.
+
+# Time complexity for this problem will be O(m x n), where m is the length of coins and n is the number amount.
+# Space complexity will be O(n), where dp will eventually grow to the size n.

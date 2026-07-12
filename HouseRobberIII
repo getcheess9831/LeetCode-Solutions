@@ -1,0 +1,27 @@
+class Solution(object):
+    def rob(self, root):
+        """
+        :type root: Optional[TreeNode]
+        :rtype: int
+        """
+        def maxRob(node):
+            if node == None:
+                return (0, 0)
+            
+            left = maxRob(node.left) #def returns a tuple, left[0] is rob, left[1] is don't rob.
+            right = maxRob(node.right)
+
+            robb = node.val + left[1] + right[1]
+            not_rob = max(left[0], left[1]) + max(right[0], right[1])
+
+            return (robb, not_rob)
+
+        
+        return max(maxRob(root))
+
+# Problem: HouseRobberIII, given the root of a binary tree, return the maximum amount of money the thief can rob without alerting the police.(robbing a node and its directly linked nodes will alert.)
+
+# Core idea/Approach: Using recursion to start from the bottom of the tree, for each node we have two options, to rob it or not to rob it, we want to know if we rob/not rob this node, what is the maximum number we can get, and return both values to the upper layer. If we rob the node, we need the value from not robbing both of the son nodes, if we do not rob the node, the son nodes can decide whether they want to rob or not, in other words, compare the rob and not rob values of the son nodes and take the higher one.
+
+# Time complexity is O(n) where n is the number of nodes, we will check every node.
+# Space complexity is O(h) where h is the height of the binary tree, the depth of the recursion is dependent on the height of the tree.

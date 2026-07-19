@@ -1,0 +1,33 @@
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        tails = [nums[0]]
+
+        for i in range(1, len(nums)):
+            left = 0
+            right = len(tails)
+            if nums[i] > tails[-1]:
+                tails.append(nums[i])
+                continue
+            while left < right:
+                mid = (left+right) // 2
+                if tails[mid] < nums[i]:
+                    left = mid + 1
+                else:
+                    right = mid 
+            
+            tails[right] = nums[i]
+            
+
+        return len(tails)
+
+# Problem: Longest Increasing Subsequence, given an array, find the longest strictly increasing subsequence.
+
+# Core Idea: the follow up question gives a hint that we can use binary search to solve the problem in a better time complexity, instead of naming the array dp, we use tails this time, tails[i] represents the smallest ending number we can have with a subsequence that is the length of i+1. We will iterate through nums array to seek for better ending numbers, which is smaller ones. Using binary search to speed up the process, instead of going through the whole tails array, we can locate the first bigger element in the array using binary search, and replace it. For if nums[i] is the biggest comparing to tails, we append it to the end of tails, duplicated elements will go through the binary search for a replacement, instead of appending it to the end, that's one mistake that I made while solving the problem, giving nums[i] >= tails[-1], it appends multiple times of a same number, if the number is the max in the array nums. The length of the array tails will be the final answer.
+
+# Time complexity is O(n logn), one iteration through the array nums, for each element n we preform binary search, which gives us n logn.
+
+# Space complexity is O(n), the tails in worst case can have n elements. When it's a sorted strictly increasing array.

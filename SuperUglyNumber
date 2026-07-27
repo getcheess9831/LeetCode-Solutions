@@ -1,0 +1,30 @@
+class Solution(object):
+    def nthSuperUglyNumber(self, n, primes):
+        """
+        :type n: int
+        :type primes: List[int]
+        :rtype: int
+        """
+        dp = [1]
+        heap = [(p,p,0) for p in primes]
+        heapq.heapify(heap)
+
+        while len(dp) < n :
+            candidate, prime, pos = heapq.heappop(heap)
+            if candidate <= dp[-1]:
+                heapq.heappush(heap, (prime * dp[pos+1], prime, pos + 1))
+            else:
+                dp.append(candidate)
+                heapq.heappush(heap, (prime * dp[pos+1], prime, pos + 1))
+
+
+        
+        return dp[-1]
+
+# Problem: SuperUglyNumber, given an integer n and an array of integers primes, return the n^th super ugly number.
+
+# Core Idea/Approach: Using heap to store the possible candidates of the next super ugly number, the heap consists of elements represented by tuple, which are candidate, prime number itself, and its the position in dp used to get the candidate. The heap is initialized with all the numbers in primes multiply by 1, to get the candidates we have using ugly number 1, and prime itself, position 0. During each loop, we pop the heap, which gives us the lowest candidate we have, then check for duplicates, if not we will add it to dp and push a new set of tuple using the popped information into heap. Each number in primes maintains its own progress through dp, advancing independently. The loop will end once len(dp) == n.
+
+# Time Complexity: O(n logk), where we loop around n times, and during each loop, we perform a pop and push, which is logk.
+
+# Space Complexity: O(n+k), the size of dp will be n and size of heap will always be k.

@@ -1,0 +1,32 @@
+class Solution(object):
+    def integerBreak(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        count = n // 3
+        leftOver = n % 3
+        result = 1
+        if n == 2:
+            return 1
+        elif n == 3:
+            return 2
+        else:
+            for _ in range(count-1):
+                result = result * 3
+            
+        if leftOver == 0:
+            return result * 3
+        if leftOver == 1:
+            return result * 4
+        if leftOver == 2:
+            return result * 3 * 2
+
+
+# Problem: Integer Break, given an integer n, break it into the sum of k positive integers, where k >= 2, and maximize the product of those integers. Return the maximum product you can get.
+
+# Core Idea/Approach: By running examples on paper, we can get a result that the lower the difference between all the positive integers that we break into, the higher product we can get, and that the examples do show if we break it into 3 positive integers, the product is the highest. With this in mind, we can just do a greedy algorithm: always break the integer n into k 3's, which is n // 3, store the value k, and store the left over value as well, which is n % 3, if the left over is 0, we can just go with 3^k, if it's 1, since multiplying by 1 doesn't change the result at all, we add it to one of the 3's to make it 4, which means multiplying by 4 instead of 3 at the end, and if it's 2, calculations show that it's always better to multiply by an additional 2 instead of making two 4's or one 5. One thing we need to be clear for is if n is <= 3, we don't need to run the program, given k >= 2, for n == 2 or n == 3, the answer is always 1 (1 + 1, 1 * 1 = 1), and 2(2 + 1, 2 * 1 = 2). These are the base cases.
+
+# Time Complexity: O(n), we iterate for n // 3 times, which simplifies to O(n).
+
+# Space Complexity: O(1), all variables are fix sized. 
